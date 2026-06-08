@@ -52,7 +52,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
-		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
+		add_action( 'init', [ $this, 'load_textdomain' ] );
 		add_action( 'plugins_loaded', [ $this->addon_manager, 'load_addons' ], 5 );
 
 		if ( is_admin() ) {
@@ -63,6 +63,15 @@ final class Plugin {
 
 	/**
 	 * Load plugin text domain for translations.
+	 *
+	 * Bound to the 'init' hook so WordPress has fully initialised its
+	 * locale/i18n stack before we register translations. Calling
+	 * load_plugin_textdomain() earlier (e.g. on 'plugins_loaded' or at
+	 * file-load time) triggers the _load_textdomain_just_in_time notice
+	 * introduced in WordPress 6.7.
+	 *
+	 * The third argument is the path relative to WP_PLUGIN_DIR, which is
+	 * exactly what dirname( plugin_basename() ) . '/languages' produces.
 	 *
 	 * @return void
 	 */
