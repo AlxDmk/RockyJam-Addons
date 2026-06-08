@@ -23,6 +23,7 @@ class AdminPage {
 
 	public function register(): void {
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
+		add_action( 'admin_menu', [ $this, 'register_parent_menu' ], 5 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		/*
 		 * Формы отправляются на admin-post.php с action=rockyjam_handle.
@@ -32,18 +33,50 @@ class AdminPage {
 		add_action( 'admin_post_rockyjam_handle', [ $this, 'handle_requests' ] );
 	}
 
+	public function register_parent_menu(): void {
+		// Register the top-level "RockyJam" menu only once.
+		// Both plugins call this; the second call is a no-op because
+		// WordPress silently ignores duplicate menu slugs.
+		if ( ! $this->parent_menu_exists() ) {
+			add_menu_page(
+				'RockyJam',
+				'RockyJam',
+				'manage_options',
+				'rockyjam',
+				'__return_null',
+				'data:image/svg+xml;base64,' . base64_encode( '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="none" stroke="#a7aaad" stroke-width="1.5"/><text x="10" y="14.5" text-anchor="middle" font-size="11" font-weight="bold" fill="#a7aaad" font-family="sans-serif">RJ</text></svg>' ),
+				57
+			);
+		}
+	}
+
 	public function add_menu_page(): void {
-		add_options_page(
+		add_submenu_page(
+			'rockyjam',
 			__( 'RockyJam Addons', 'rockyjam-addons' ),
-			__( 'RockyJam Addons', 'rockyjam-addons' ),
+			__( 'Addons', 'rockyjam-addons' ),
 			'manage_options',
 			'rockyjam-addons',
 			[ $this, 'render_page' ]
 		);
 	}
 
+	/** Check if the top-level RockyJam menu already exists. */
+	private function parent_menu_exists(): bool {
+		global $menu;
+		if ( ! is_array( $menu ) ) {
+			return false;
+		}
+		foreach ( $menu as $item ) {
+			if ( isset( $item[2] ) && 'rockyjam' === $item[2] ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function enqueue_assets( string $hook ): void {
-		if ( 'settings_page_rockyjam-addons' !== $hook ) {
+		if ( 'rockyjam_page_rockyjam-addons' !== $hook ) {
 			return;
 		}
 		wp_enqueue_style(
@@ -75,7 +108,7 @@ class AdminPage {
 		}
 
 		if ( empty( $_POST['rockyjam_action'] ) ) {
-			wp_safe_redirect( admin_url( 'options-general.php?page=rockyjam-addons' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=rockyjam-addons' ) );
 			exit;
 		}
 
@@ -89,7 +122,7 @@ class AdminPage {
 		}
 
 		$action   = sanitize_key( $_POST['rockyjam_action'] );
-		$redirect = admin_url( 'options-general.php?page=rockyjam-addons' );
+		$redirect = admin_url( 'admin.php?page=rockyjam-addons' );
 		$notice   = '';     // text of transient notice
 		$notice_type = 'success';
 
