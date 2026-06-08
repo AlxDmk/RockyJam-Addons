@@ -1,0 +1,34 @@
+{
+    "name": "alxdmk/rockyjam-addons",
+    "description": "Modular WordPress addon plugin for RockyJam features.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "AlxDmk",
+            "homepage": "https://github.com/AlxDmk"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "wp-coding-standards/wpcs": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "RockyJamAddons\\": "includes/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=WordPress .",
+        "phpcbf": "phpcbf --standard=WordPress ."
+    }
+}
