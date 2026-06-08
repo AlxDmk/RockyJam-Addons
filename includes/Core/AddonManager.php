@@ -293,6 +293,27 @@ class AddonManager {
 		$functions_php .= "\treturn esc_html__( 'Hello from " . addslashes( $safe_name ) . "!', 'rockyjam-addons' );\n";
 		$functions_php .= "}\n";
 
+		// Hook Manager integration: declare WC-hooks via rockyjam_addon_hooks filter.
+		$functions_php .= "\n/**\n";
+		$functions_php .= " * Declare this addon's WooCommerce hooks to RockyJam Templates Hook Manager.\n";
+		$functions_php .= " *\n";
+		$functions_php .= " * For each WC-hook callback this addon provides, add an entry to the\n";
+		$functions_php .= " * \\\$hooks array below. The Hooks Editor will then show it in the UI,\n";
+		$functions_php .= " * letting you toggle it on/off and change its priority per template.\n";
+		$functions_php .= " */\n";
+		$functions_php .= "add_filter( 'rockyjam_addon_hooks', function ( array \$hooks ): array {\n";
+		$functions_php .= "\t// TODO: replace the commented example with your actual hook functions.\n";
+		$functions_php .= "\t// \$hooks[] = [\n";
+		$functions_php .= "\t//     'addon_id'   => '" . $addon_id . "',\n";
+		$functions_php .= "\t//     'addon_name' => '" . addslashes( $safe_name ) . "',\n";
+		$functions_php .= "\t//     'hook'       => 'woocommerce_single_product_summary',\n";
+		$functions_php .= "\t//     'function'   => 'rockyjam_" . strtolower( $class_prefix ) . "_my_block',\n";
+		$functions_php .= "\t//     'priority'   => 25,\n";
+		$functions_php .= "\t//     'label'      => 'My Custom Block',\n";
+		$functions_php .= "\t// ];\n";
+		$functions_php .= "\treturn \$hooks;\n";
+		$functions_php .= "} );\n";
+
 		// -----------------------------------------------------------------
 		// assets/style.css
 		// -----------------------------------------------------------------
