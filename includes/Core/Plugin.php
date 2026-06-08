@@ -49,11 +49,16 @@ final class Plugin {
 	/**
 	 * Boot the plugin: register hooks.
 	 *
+	 * Both load_textdomain and load_addons must run on 'init' or later.
+	 * load_textdomain fires first (priority 1) so that translation functions
+	 * like __() are available when addon files are included (priority 5).
+	 * This prevents the _load_textdomain_just_in_time notice (WP 6.7+).
+	 *
 	 * @return void
 	 */
 	public function boot(): void {
-		add_action( 'init', [ $this, 'load_textdomain' ] );
-		add_action( 'plugins_loaded', [ $this->addon_manager, 'load_addons' ], 5 );
+		add_action( 'init', [ $this, 'load_textdomain' ], 1 );
+		add_action( 'init', [ $this->addon_manager, 'load_addons' ], 5 );
 
 		if ( is_admin() ) {
 			$admin = new \RockyJamAddons\Admin\AdminPage( $this->addon_manager );
@@ -64,14 +69,8 @@ final class Plugin {
 	/**
 	 * Load plugin text domain for translations.
 	 *
-	 * Bound to the 'init' hook so WordPress has fully initialised its
-	 * locale/i18n stack before we register translations. Calling
-	 * load_plugin_textdomain() earlier (e.g. on 'plugins_loaded' or at
-	 * file-load time) triggers the _load_textdomain_just_in_time notice
-	 * introduced in WordPress 6.7.
-	 *
-	 * The third argument is the path relative to WP_PLUGIN_DIR, which is
-	 * exactly what dirname( plugin_basename() ) . '/languages' produces.
+	 * Bound to 'init' priority 1 so WordPress has fully initialised its
+	 * locale/i18n stack before we register translations.
 	 *
 	 * @return void
 	 */
