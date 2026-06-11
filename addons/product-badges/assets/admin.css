@@ -1,0 +1,26 @@
+/* Product Badges Addon — Admin Styles */
+
+.rja-badges-admin .rja-badge-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.rja-badges-admin .rja-badge-title {
+    flex: 0 0 220px;
+}
+
+.rja-badges-admin .rja-badge-text {
+    flex: 1;
+}
+
+.rja-badges-admin .rja-badge-remove {
+    flex-shrink: 0;
+    color: #c41e2e;
+    border-color: #c41e2e;
+}
+
+#rja-add-badge {
+    margin-top: 8px;
+}

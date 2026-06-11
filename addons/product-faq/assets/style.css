@@ -1,0 +1,78 @@
+/* Product FAQ Addon — Frontend Styles */
+/* Core accordion layout; detailed styles in rogue-product template style.css */
+
+.rj-faq-section {
+    padding: 48px 0;
+    border-top: 1px solid #ddd;
+}
+
+.rj-section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: #1a1a1a;
+}
+
+.rj-faq-items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.rj-faq-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.rj-faq-item.active {
+    border-color: #c41e2e;
+}
+
+.rj-faq-question {
+    background: #f5f5f5;
+    padding: 16px 24px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+    user-select: none;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.rj-faq-question:hover {
+    background: #ddd;
+}
+
+.rj-faq-question::after {
+    content: "+";
+    font-size: 18px;
+    font-weight: 700;
+    color: #c41e2e;
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+.rj-faq-item.active .rj-faq-question::after {
+    content: "−";
+}
+
+.rj-faq-answer {
+    background: #fff;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+
+.rj-faq-answer-content {
+    padding: 24px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #666;
+}

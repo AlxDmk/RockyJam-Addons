@@ -1,0 +1,17 @@
+/* Shipping Badge Addon — Frontend Styles */
+
+.rj-shipping-badge-wrap {
+    margin-bottom: 16px;
+}
+
+.rj-badge-shipping {
+    display: inline-block;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

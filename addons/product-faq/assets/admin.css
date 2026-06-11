@@ -1,0 +1,54 @@
+/* Product FAQ Addon — Admin Styles */
+
+.rja-faq-admin .rja-faq-row {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+
+.rja-faq-admin .rja-faq-row-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    cursor: move;
+}
+
+.rja-faq-admin .rja-faq-row-header strong {
+    flex: 1;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rja-faq-admin .rja-faq-handle {
+    color: #999;
+    cursor: move;
+}
+
+.rja-faq-admin .rja-faq-remove {
+    color: #c41e2e !important;
+    text-decoration: none;
+}
+
+.rja-faq-admin .rja-faq-row-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rja-faq-admin .rja-faq-row-body label {
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #555;
+}
+
+#rja-add-faq {
+    margin-top: 8px;
+}
