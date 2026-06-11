@@ -1,0 +1,99 @@
+/**
+ * Key Features — Admin Meta-box Styles
+ */
+
+.rjt-kf-metabox {
+    padding: 4px 0;
+}
+
+.rjt-kf-metabox__hint {
+    color: #666;
+    font-size: 13px;
+    margin: 0 0 14px;
+}
+
+.rjt-kf-metabox__empty {
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
+    margin: 10px 0 0;
+}
+
+/* ── Sortable list ─────────────────────────────────────────── */
+.rjt-kf-list {
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+}
+
+.rjt-kf-list__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.rjt-kf-list__item:last-child {
+    border-bottom: none;
+}
+
+.rjt-kf-list__item.sortable-ghost {
+    opacity: 0.4;
+    background: #e8f0fe;
+}
+
+/* Drag handle */
+.rjt-kf-list__handle {
+    cursor: grab;
+    color: #bbb;
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+
+.rjt-kf-list__handle:hover {
+    color: #888;
+}
+
+/* Text input */
+.rjt-kf-list__input {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Remove button */
+.rjt-kf-list__remove {
+    flex-shrink: 0;
+    padding: 0 6px !important;
+    color: #c62828 !important;
+    border-color: #e57373 !important;
+    background: #fff !important;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.rjt-kf-list__remove:hover {
+    background: #fdecea !important;
+}
+
+.rjt-kf-list__remove .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+/* Add button */
+.rjt-kf-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.rjt-kf-add-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
