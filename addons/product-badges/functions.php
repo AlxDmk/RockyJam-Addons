@@ -35,12 +35,12 @@ if ( ! function_exists( 'rockyjam_product_badges_render' ) ) {
 
 add_filter( 'rockyjam_addon_hooks', function( $hooks ) {
     $hooks[] = array(
-        'name'        => 'rockyjam_product_badges_render',
-        'label'       => __( 'Product Badges', 'rockyjam-addons' ),
-        'description' => __( 'Renders trust badges (Made in USA, Warranty, etc.) on the product page.', 'rockyjam-addons' ),
-        'addon'       => 'product-badges',
-        'hook'        => 'woocommerce_single_product_summary',
-        'priority'    => 45,
+        'addon_id'   => 'product-badges',
+        'addon_name' => 'Product Badges',
+        'hook'       => 'woocommerce_single_product_summary',
+        'function'   => 'rockyjam_product_badges_render',
+        'priority'   => 45,
+        'label'      => __( 'Product Badges', 'rockyjam-addons' ),
     );
     return $hooks;
 } );

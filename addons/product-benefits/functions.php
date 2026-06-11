@@ -42,12 +42,12 @@ if ( ! function_exists( 'rockyjam_product_benefits_render' ) ) {
 
 add_filter( 'rockyjam_addon_hooks', function( $hooks ) {
     $hooks[] = array(
-        'name'        => 'rockyjam_product_benefits_render',
-        'label'       => __( 'Product Benefits', 'rockyjam-addons' ),
-        'description' => __( 'Renders a numbered benefits grid after the product tabs.', 'rockyjam-addons' ),
-        'addon'       => 'product-benefits',
-        'hook'        => 'woocommerce_after_single_product_summary',
-        'priority'    => 18,
+        'addon_id'   => 'product-benefits',
+        'addon_name' => 'Product Benefits',
+        'hook'       => 'woocommerce_after_single_product_summary',
+        'function'   => 'rockyjam_product_benefits_render',
+        'priority'   => 18,
+        'label'      => __( 'Product Benefits', 'rockyjam-addons' ),
     );
     return $hooks;
 } );

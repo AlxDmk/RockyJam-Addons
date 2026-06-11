@@ -28,12 +28,12 @@ if ( ! function_exists( 'rockyjam_shipping_badge_render' ) ) {
  */
 add_filter( 'rockyjam_addon_hooks', function( $hooks ) {
     $hooks[] = array(
-        'name'        => 'rockyjam_shipping_badge_render',
-        'label'       => __( 'Shipping Badge', 'rockyjam-addons' ),
-        'description' => __( 'Renders a shipping badge above the product title.', 'rockyjam-addons' ),
-        'addon'       => 'shipping-badge',
-        'hook'        => 'woocommerce_single_product_summary',
-        'priority'    => 3,
+        'addon_id'   => 'shipping-badge',
+        'addon_name' => 'Shipping Badge',
+        'hook'       => 'woocommerce_single_product_summary',
+        'function'   => 'rockyjam_shipping_badge_render',
+        'priority'   => 3,
+        'label'      => __( 'Shipping Badge', 'rockyjam-addons' ),
     );
     return $hooks;
 } );

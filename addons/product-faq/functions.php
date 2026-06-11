@@ -40,12 +40,12 @@ if ( ! function_exists( 'rockyjam_product_faq_render' ) ) {
 
 add_filter( 'rockyjam_addon_hooks', function( $hooks ) {
     $hooks[] = array(
-        'name'        => 'rockyjam_product_faq_render',
-        'label'       => __( 'Product FAQ', 'rockyjam-addons' ),
-        'description' => __( 'Renders an accordion FAQ section below product tabs.', 'rockyjam-addons' ),
-        'addon'       => 'product-faq',
-        'hook'        => 'woocommerce_after_single_product_summary',
-        'priority'    => 25,
+        'addon_id'   => 'product-faq',
+        'addon_name' => 'Product FAQ',
+        'hook'       => 'woocommerce_after_single_product_summary',
+        'function'   => 'rockyjam_product_faq_render',
+        'priority'   => 25,
+        'label'      => __( 'Product FAQ', 'rockyjam-addons' ),
     );
     return $hooks;
 } );
