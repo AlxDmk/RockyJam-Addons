@@ -1,11 +1,16 @@
-/* Shipping Badge Addon — Admin Styles */
-
-.rja-shipping-badge-admin label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 4px;
+.rja-shipping-badge-admin .rja-shipping-badge-table {
+    margin-top: 6px;
 }
 
-.rja-shipping-badge-admin input {
-    margin-top: 4px;
+.rja-shipping-badge-admin .rja-shipping-badge-table th,
+.rja-shipping-badge-admin .rja-shipping-badge-table td {
+    padding: 4px 6px;
+}
+
+.rja-shipping-badge-admin .rja-shipping-badge-table input[type="text"] {
+    font-size: 12px;
+}
+
+.rja-shipping-badge-admin .rja-shipping-badge-table select {
+    font-size: 12px;
 }
