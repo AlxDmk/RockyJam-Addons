@@ -8,17 +8,65 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'rockyjam_shipping_badge_render' ) ) {
     /**
-     * Render the shipping badge for the current product.
+     * Render the shipping badges for the current product.
+     *
+     * Supports multiple badges stored as JSON in _rj_shipping_badges.
+     * Falls back to legacy single-text meta _rj_shipping_badge_text.
      */
     function rockyjam_shipping_badge_render() {
         global $product;
         if ( ! $product ) return;
 
-        $badge_text = get_post_meta( $product->get_id(), '_rj_shipping_badge_text', true );
-        if ( empty( $badge_text ) ) return;
+        $product_id = $product->get_id();
+
+        // New multi-badge format.
+        $raw   = get_post_meta( $product_id, '_rj_shipping_badges', true );
+        $items = array();
+
+        if ( is_string( $raw ) && '' !== $raw ) {
+            $decoded = json_decode( $raw, true );
+            if ( is_array( $decoded ) ) {
+                $items = $decoded;
+            }
+        }
+
+        // Legacy single badge fallback.
+        if ( empty( $items ) ) {
+            $legacy = get_post_meta( $product_id, '_rj_shipping_badge_text', true );
+            if ( ! empty( $legacy ) ) {
+                $items = array(
+                    array(
+                        'text'  => $legacy,
+                        'bg'    => 'rj-badge-bg-default',
+                        'title' => '',
+                    ),
+                );
+            }
+        }
+
+        if ( empty( $items ) ) return;
 
         echo '<div class="rj-shipping-badge-wrap">';
-        echo '<span class="rj-badge-shipping">' . esc_html( $badge_text ) . '</span>';
+
+        foreach ( $items as $item ) {
+            $text  = isset( $item['text'] ) ? $item['text'] : '';
+            $bg    = isset( $item['bg'] ) ? $item['bg'] : 'rj-badge-bg-default';
+            $title = isset( $item['title'] ) ? $item['title'] : '';
+
+            if ( '' === $text ) {
+                continue;
+            }
+
+            $classes = array( 'rj-badge-shipping', $bg );
+            $attrs   = array();
+
+            if ( '' !== $title ) {
+                $attrs[] = 'title="' . esc_attr( $title ) . '"';
+            }
+
+            echo '<span class="' . esc_attr( implode( ' ', $classes ) ) . '" ' . implode( ' ', $attrs ) . '>' . esc_html( $text ) . '</span>';
+        }
+
         echo '</div>';
     }
 }
