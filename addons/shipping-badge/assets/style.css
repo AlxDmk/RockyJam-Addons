@@ -1,4 +1,9 @@
-/* Shipping Badge Addon — Frontend Styles */
+/* Shipping Badge Addon — Frontend Styles
+ * Базовый цвет бейджа берётся из --rj-btn-bg (тёмная кнопка темы).
+ * Семантические варианты (green, orange, blue) остаются фиксированными —
+ * они несут смысловую нагрузку (доставка, срочность, инфо) и
+ * не должны меняться вместе с акцентом темы.
+ */
 
 .rj-shipping-badge-wrap {
     display: flex;
@@ -13,7 +18,7 @@
     align-items: center;
     justify-content: center;
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: var(--rj-radius, 4px);
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
@@ -23,17 +28,21 @@
 
 /* Background variants */
 .rj-badge-bg-default {
-    background: #1a1a1a;
+    /* Основной цвет — берётся из темы */
+    background: var(--rj-btn-bg, #1a1a1a);
 }
 
 .rj-badge-bg-green {
+    /* Семантический: «в наличии / бесплатно» — остаётся зелёным */
     background: #2f855a;
 }
 
 .rj-badge-bg-orange {
+    /* Семантический: «срочно / ограничено» — остаётся оранжевым */
     background: #c05621;
 }
 
 .rj-badge-bg-blue {
+    /* Семантический: «информация» — остаётся синим */
     background: #2b6cb0;
 }

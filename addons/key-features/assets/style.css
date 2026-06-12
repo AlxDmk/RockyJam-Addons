@@ -1,20 +1,22 @@
 /**
  * Key Features — Frontend Styles
+ * Цвета берутся из Plugin Contract темы (--rj-*).
+ * Fallback-значения обеспечивают работу без RockyJam-Theme.
  */
 
 .product-key-features {
     margin: 20px 0;
     padding: 16px 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
+    background: var(--rj-surface, #f8f9fa);
+    border-radius: var(--rj-radius, 8px);
+    border: 1px solid var(--rj-border, #e9ecef);
 }
 
 .product-key-features__title {
     font-size: 16px;
     font-weight: 600;
     margin: 0 0 12px;
-    color: #1d2327;
+    color: var(--rj-text, #1d2327);
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
@@ -32,8 +34,8 @@
     padding: 6px 0;
     font-size: 14px;
     line-height: 1.5;
-    color: #2c3338;
-    border-bottom: 1px solid #e9ecef;
+    color: var(--rj-text, #2c3338);
+    border-bottom: 1px solid var(--rj-border, #e9ecef);
 }
 
 .product-key-features__item:last-child {
@@ -41,10 +43,11 @@
 }
 
 .product-key-features__item .dashicons {
-    color: #cc0000;
+    color: var(--rj-accent, #cc0000);
     font-size: 18px;
     width: 18px;
     height: 18px;
     flex-shrink: 0;
     margin-top: 2px;
+    font-family: dashicons !important;
 }

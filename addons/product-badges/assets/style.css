@@ -1,5 +1,8 @@
-/* Product Badges Addon — Frontend Styles (rogue-product template provides layout) */
-/* Styles are intentionally minimal here; bulk is in the template's style.css */
+/* Product Badges Addon — Frontend Styles
+ * Цвета берутся из Plugin Contract темы (--rj-*).
+ * Fallback-значения обеспечивают работу без RockyJam-Theme.
+ * Bulk layout styles are in the template's style.css.
+ */
 
 .rj-trust-badges {
     display: grid;
@@ -7,13 +10,13 @@
     gap: 16px;
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--rj-border, #ddd);
 }
 
 .rj-trust-badge {
-    background: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    background: var(--rj-surface, #f5f5f5);
+    border: 1px solid var(--rj-border, #ddd);
+    border-radius: var(--rj-radius, 4px);
     padding: 16px;
     text-align: center;
 }
@@ -23,10 +26,10 @@
     font-weight: 700;
     margin-bottom: 8px;
     text-transform: uppercase;
-    color: #1a1a1a;
+    color: var(--rj-text, #1a1a1a);
 }
 
 .rj-trust-badge-text {
     font-size: 12px;
-    color: #666;
+    color: var(--rj-text-muted, #666);
 }
