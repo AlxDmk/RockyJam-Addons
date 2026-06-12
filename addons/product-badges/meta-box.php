@@ -1,74 +1,54 @@
 <?php
 /**
- * Addon: Product Badges — meta-box.php
- * Admin meta-box to add/remove/edit trust badges per product.
+ * Product Badges - meta-box.php
+ * Registers a section inside the shared "RockyJam Addons" WooCommerce product tab.
  */
 
 defined( 'ABSPATH' ) || exit;
 
-add_action( 'add_meta_boxes', function() {
-    add_meta_box(
-        'rja_product_badges',
-        __( 'Product Badges', 'rockyjam-addons' ),
-        'rja_product_badges_meta_box_render',
-        'product',
-        'normal',
-        'default'
-    );
+add_filter( 'rockyjam_product_tab_sections', function( array $sections ): array {
+    $sections['product_badges'] = [
+        'label'    => __( 'Product Badges', 'rockyjam-addons' ),
+        'callback' => 'rja_product_badges_panel_render',
+        'save'     => 'rja_product_badges_panel_save',
+        'priority' => 30,
+    ];
+    return $sections;
 } );
 
-function rja_product_badges_meta_box_render( $post ) {
+function rja_product_badges_panel_render( int $post_id ): void {
     wp_nonce_field( 'rja_product_badges_save', 'rja_product_badges_nonce' );
-    $badges = get_post_meta( $post->ID, '_rj_product_badges', true );
-    if ( ! is_array( $badges ) ) $badges = array();
+    $badges = get_post_meta( $post_id, '_rj_product_badges', true );
+    if ( ! is_array( $badges ) ) $badges = [];
     ?>
-    <div class="rja-badges-admin">
-        <p class="description"><?php esc_html_e( 'Add trust badges displayed on the product page (e.g. Made in USA, Warranty).', 'rockyjam-addons' ); ?></p>
-        <div id="rja-badges-list">
-            <?php foreach ( $badges as $i => $badge ) : ?>
-            <div class="rja-badge-row">
-                <input
-                    type="text"
-                    name="rja_badges[<?php echo $i; ?>][title]"
-                    value="<?php echo esc_attr( $badge['title'] ); ?>"
-                    placeholder="<?php esc_attr_e( 'Badge Title (e.g. 🇺🇸 Made in USA)', 'rockyjam-addons' ); ?>"
-                    class="rja-badge-title"
-                />
-                <input
-                    type="text"
-                    name="rja_badges[<?php echo $i; ?>][text]"
-                    value="<?php echo esc_attr( $badge['text'] ); ?>"
-                    placeholder="<?php esc_attr_e( 'Badge Text (e.g. Proudly manufactured in Ohio)', 'rockyjam-addons' ); ?>"
-                    class="rja-badge-text"
-                />
-                <button type="button" class="rja-badge-remove button"><?php esc_html_e( 'Remove', 'rockyjam-addons' ); ?></button>
-            </div>
-            <?php endforeach; ?>
+    <p class="description"><?php esc_html_e( 'Add trust badges displayed on the product page (e.g. Made in USA, Warranty).', 'rockyjam-addons' ); ?></p>
+    <div id="rja-badges-list">
+        <?php foreach ( $badges as $i => $badge ) : ?>
+        <div class="rja-badge-row">
+            <input type="text" name="rja_badges[<?php echo $i; ?>][title]" value="<?php echo esc_attr( $badge['title'] ); ?>" placeholder="<?php esc_attr_e( 'Badge Title (e.g. us Made in USA)', 'rockyjam-addons' ); ?>" class="rja-badge-title" />
+            <input type="text" name="rja_badges[<?php echo $i; ?>][text]" value="<?php echo esc_attr( $badge['text'] ); ?>" placeholder="<?php esc_attr_e( 'Badge Text (e.g. Proudly manufactured in Ohio)', 'rockyjam-addons' ); ?>" class="rja-badge-text" />
+            <button type="button" class="rja-badge-remove button"><?php esc_html_e( 'Remove', 'rockyjam-addons' ); ?></button>
         </div>
-        <button type="button" id="rja-add-badge" class="button button-secondary">
-            <?php esc_html_e( '+ Add Badge', 'rockyjam-addons' ); ?>
-        </button>
+        <?php endforeach; ?>
     </div>
+    <button type="button" id="rja-add-badge" class="button button-secondary"><?php esc_html_e( '+ Add Badge', 'rockyjam-addons' ); ?></button>
     <?php
 }
 
-add_action( 'save_post_product', function( $post_id ) {
-    if (
-        ! isset( $_POST['rja_product_badges_nonce'] ) ||
-        ! wp_verify_nonce( $_POST['rja_product_badges_nonce'], 'rja_product_badges_save' )
-    ) return;
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
-    if ( ! current_user_can( 'edit_post', $post_id ) ) return;
-
-    $badges = array();
-    if ( ! empty( $_POST['rja_badges'] ) && is_array( $_POST['rja_badges'] ) ) {
-        foreach ( $_POST['rja_badges'] as $badge ) {
-            $title = sanitize_text_field( $badge['title'] );
-            $text  = sanitize_text_field( $badge['text'] );
-            if ( $title ) {
-                $badges[] = array( 'title' => $title, 'text' => $text );
-            }
+function rja_product_badges_panel_save( int $post_id ): void {
+    if ( ! isset( $_POST['rja_product_badges_nonce'] ) || ! wp_verify_nonce( $_POST['rja_product_badges_nonce'], 'rja_product_badges_save' ) ) return;
+    $raw = isset( $_POST['rja_badges'] ) ? (array) $_POST['rja_badges'] : [];
+    $badges = [];
+    foreach ( $raw as $badge ) {
+        $title = sanitize_text_field( $badge['title'] ?? '' );
+        $text  = sanitize_text_field( $badge['text']  ?? '' );
+        if ( $title || $text ) {
+            $badges[] = [ 'title' => $title, 'text' => $text ];
         }
     }
-    update_post_meta( $post_id, '_rj_product_badges', $badges );
-} );
+    if ( empty( $badges ) ) {
+        delete_post_meta( $post_id, '_rj_product_badges' );
+    } else {
+        update_post_meta( $post_id, '_rj_product_badges', $badges );
+    }
+}
