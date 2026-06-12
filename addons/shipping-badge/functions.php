@@ -12,6 +12,7 @@ if ( ! function_exists( 'rockyjam_shipping_badge_render' ) ) {
      *
      * Supports multiple badges stored as JSON in _rj_shipping_badges.
      * Falls back to legacy single-text meta _rj_shipping_badge_text.
+     * Also prepends an automatic "Sale" badge when the product is on sale.
      */
     function rockyjam_shipping_badge_render() {
         global $product;
@@ -41,6 +42,28 @@ if ( ! function_exists( 'rockyjam_shipping_badge_render' ) ) {
                         'title' => '',
                     ),
                 );
+            }
+        }
+
+        // Automatic "Sale" badge at the first position when product is on sale.
+        if ( $product->is_on_sale() ) {
+            $sale_badge = array(
+                'text'  => __( 'Sale', 'rockyjam-addons' ),
+                'bg'    => 'rj-badge-bg-orange',
+                'title' => '',
+            );
+
+            // Prepend sale badge only if there is no existing badge with exactly same text.
+            $has_sale = false;
+            foreach ( $items as $item ) {
+                if ( isset( $item['text'] ) && $item['text'] === $sale_badge['text'] ) {
+                    $has_sale = true;
+                    break;
+                }
+            }
+
+            if ( ! $has_sale ) {
+                array_unshift( $items, $sale_badge );
             }
         }
 
