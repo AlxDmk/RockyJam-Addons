@@ -24,7 +24,7 @@ add_action( 'add_meta_boxes', function() {
  * Render the meta-box.
  *
  * Supports multiple badges stored as a JSON-encoded array in _rj_shipping_badges.
- * Each badge has: text, background (CSS color class or hex), and optional title attribute.
+ * Each badge has: text, background (CSS color class), and optional title attribute.
  */
 function rja_shipping_badge_meta_box_render( $post ) {
     wp_nonce_field( 'rja_shipping_badge_save', 'rja_shipping_badge_nonce' );
@@ -65,21 +65,24 @@ function rja_shipping_badge_meta_box_render( $post ) {
     }
     ?>
     <div class="rja-shipping-badge-admin">
-        <p class="description"><?php esc_html_e( 'Configure one or more shipping badges. Empty rows will be ignored.', 'rockyjam-addons' ); ?></p>
+        <p class="description"><?php esc_html_e( 'Configure one or more shipping badges. Empty rows will be ignored. Drag rows to change order.', 'rockyjam-addons' ); ?></p>
 
         <table class="widefat rja-shipping-badge-table">
             <thead>
                 <tr>
+                    <th class="rja-sb-col-handle"></th>
                     <th><?php esc_html_e( 'Text', 'rockyjam-addons' ); ?></th>
                     <th><?php esc_html_e( 'Background', 'rockyjam-addons' ); ?></th>
+                    <th class="rja-sb-col-remove"></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="rja-shipping-badge-rows">
                 <?php foreach ( $items as $index => $item ) :
                     $text  = isset( $item['text'] ) ? $item['text'] : '';
                     $bg    = isset( $item['bg'] ) ? $item['bg'] : 'rj-badge-bg-default';
                     ?>
                     <tr>
+                        <td class="rja-sb-col-handle"><span class="rja-sb-handle" aria-hidden="true">⋮⋮</span></td>
                         <td>
                             <input
                                 type="text"
@@ -100,10 +103,14 @@ function rja_shipping_badge_meta_box_render( $post ) {
                                 <option value="rj-badge-bg-blue" <?php selected( $bg, 'rj-badge-bg-blue' ); ?>><?php esc_html_e( 'Blue', 'rockyjam-addons' ); ?></option>
                             </select>
                         </td>
+                        <td class="rja-sb-col-remove">
+                            <button type="button" class="button-link rja-sb-remove" aria-label="<?php esc_attr_e( 'Remove badge', 'rockyjam-addons' ); ?>">&times;</button>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
-                <!-- Template row for JS-based add-more (future proof). -->
+                <!-- Template row for JS-based add-more. -->
                 <tr class="rja-shipping-badge-template" style="display:none;">
+                    <td class="rja-sb-col-handle"><span class="rja-sb-handle" aria-hidden="true">⋮⋮</span></td>
                     <td>
                         <input
                             type="text"
@@ -124,10 +131,15 @@ function rja_shipping_badge_meta_box_render( $post ) {
                             <option value="rj-badge-bg-blue"><?php esc_html_e( 'Blue', 'rockyjam-addons' ); ?></option>
                         </select>
                     </td>
+                    <td class="rja-sb-col-remove">
+                        <button type="button" class="button-link rja-sb-remove" aria-label="<?php esc_attr_e( 'Remove badge', 'rockyjam-addons' ); ?>">&times;</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <p class="description"><?php esc_html_e( 'You can add additional rows via code/JS later if needed.', 'rockyjam-addons' ); ?></p>
+        <p>
+            <button type="button" class="button rja-shipping-badge-add"><?php esc_html_e( 'Add badge', 'rockyjam-addons' ); ?></button>
+        </p>
     </div>
     <?php
 }
@@ -169,9 +181,6 @@ add_action( 'save_post_product', function( $post_id ) {
         } else {
             delete_post_meta( $post_id, '_rj_shipping_badges' );
         }
-    } else {
-        // If the new field is missing completely, do not wipe existing badges silently.
-        // No-op to keep previous value.
     }
 
     // Keep legacy single_text meta for backward compatibility (optional).
