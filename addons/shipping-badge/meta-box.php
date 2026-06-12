@@ -1,7 +1,7 @@
 <?php
 /**
  * Addon: Shipping Badge — meta-box.php
- * Admin meta-box to set the badge text per product.
+ * Admin meta-box to set shipping badges per product.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 add_action( 'add_meta_boxes', function() {
     add_meta_box(
         'rja_shipping_badge',
-        __( 'Shipping Badge', 'rockyjam-addons' ),
+        __( 'Shipping Badges', 'rockyjam-addons' ),
         'rja_shipping_badge_meta_box_render',
         'product',
         'side',
@@ -22,24 +22,112 @@ add_action( 'add_meta_boxes', function() {
 
 /**
  * Render the meta-box.
+ *
+ * Supports multiple badges stored as a JSON-encoded array in _rj_shipping_badges.
+ * Each badge has: text, background (CSS color class or hex), and optional title attribute.
  */
 function rja_shipping_badge_meta_box_render( $post ) {
     wp_nonce_field( 'rja_shipping_badge_save', 'rja_shipping_badge_nonce' );
-    $badge_text = get_post_meta( $post->ID, '_rj_shipping_badge_text', true );
+
+    $raw   = get_post_meta( $post->ID, '_rj_shipping_badges', true );
+    $items = array();
+
+    if ( is_string( $raw ) && '' !== $raw ) {
+        $decoded = json_decode( $raw, true );
+        if ( is_array( $decoded ) ) {
+            $items = $decoded;
+        }
+    }
+
+    // Fallback for old single-badge meta.
+    if ( empty( $items ) ) {
+        $legacy = get_post_meta( $post->ID, '_rj_shipping_badge_text', true );
+        if ( ! empty( $legacy ) ) {
+            $items = array(
+                array(
+                    'text'  => $legacy,
+                    'bg'    => 'rj-badge-bg-default',
+                    'title' => '',
+                ),
+            );
+        }
+    }
+
+    // Ensure at least one empty row.
+    if ( empty( $items ) ) {
+        $items = array(
+            array(
+                'text'  => '',
+                'bg'    => 'rj-badge-bg-default',
+                'title' => '',
+            ),
+        );
+    }
     ?>
     <div class="rja-shipping-badge-admin">
-        <p>
-            <label for="rja_shipping_badge_text"><?php esc_html_e( 'Badge Text', 'rockyjam-addons' ); ?></label>
-            <input
-                type="text"
-                id="rja_shipping_badge_text"
-                name="rja_shipping_badge_text"
-                value="<?php echo esc_attr( $badge_text ); ?>"
-                placeholder="<?php esc_attr_e( 'e.g. 3 Ships Free Item', 'rockyjam-addons' ); ?>"
-                class="widefat"
-            />
-        </p>
-        <p class="description"><?php esc_html_e( 'Leave blank to hide the badge.', 'rockyjam-addons' ); ?></p>
+        <p class="description"><?php esc_html_e( 'Configure one or more shipping badges. Empty rows will be ignored.', 'rockyjam-addons' ); ?></p>
+
+        <table class="widefat rja-shipping-badge-table">
+            <thead>
+                <tr>
+                    <th><?php esc_html_e( 'Text', 'rockyjam-addons' ); ?></th>
+                    <th><?php esc_html_e( 'Background', 'rockyjam-addons' ); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ( $items as $index => $item ) :
+                    $text  = isset( $item['text'] ) ? $item['text'] : '';
+                    $bg    = isset( $item['bg'] ) ? $item['bg'] : 'rj-badge-bg-default';
+                    ?>
+                    <tr>
+                        <td>
+                            <input
+                                type="text"
+                                name="rja_shipping_badges[<?php echo esc_attr( $index ); ?>][text]"
+                                value="<?php echo esc_attr( $text ); ?>"
+                                placeholder="<?php esc_attr_e( 'e.g. Ships Free', 'rockyjam-addons' ); ?>"
+                                class="widefat"
+                            />
+                        </td>
+                        <td>
+                            <select
+                                name="rja_shipping_badges[<?php echo esc_attr( $index ); ?>][bg]"
+                                class="widefat"
+                            >
+                                <option value="rj-badge-bg-default" <?php selected( $bg, 'rj-badge-bg-default' ); ?>><?php esc_html_e( 'Default', 'rockyjam-addons' ); ?></option>
+                                <option value="rj-badge-bg-green" <?php selected( $bg, 'rj-badge-bg-green' ); ?>><?php esc_html_e( 'Green', 'rockyjam-addons' ); ?></option>
+                                <option value="rj-badge-bg-orange" <?php selected( $bg, 'rj-badge-bg-orange' ); ?>><?php esc_html_e( 'Orange', 'rockyjam-addons' ); ?></option>
+                                <option value="rj-badge-bg-blue" <?php selected( $bg, 'rj-badge-bg-blue' ); ?>><?php esc_html_e( 'Blue', 'rockyjam-addons' ); ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <!-- Template row for JS-based add-more (future proof). -->
+                <tr class="rja-shipping-badge-template" style="display:none;">
+                    <td>
+                        <input
+                            type="text"
+                            name="rja_shipping_badges[__index__][text]"
+                            value=""
+                            placeholder="<?php esc_attr_e( 'e.g. Ships Free', 'rockyjam-addons' ); ?>"
+                            class="widefat"
+                        />
+                    </td>
+                    <td>
+                        <select
+                            name="rja_shipping_badges[__index__][bg]"
+                            class="widefat"
+                        >
+                            <option value="rj-badge-bg-default"><?php esc_html_e( 'Default', 'rockyjam-addons' ); ?></option>
+                            <option value="rj-badge-bg-green"><?php esc_html_e( 'Green', 'rockyjam-addons' ); ?></option>
+                            <option value="rj-badge-bg-orange"><?php esc_html_e( 'Orange', 'rockyjam-addons' ); ?></option>
+                            <option value="rj-badge-bg-blue"><?php esc_html_e( 'Blue', 'rockyjam-addons' ); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="description"><?php esc_html_e( 'You can add additional rows via code/JS later if needed.', 'rockyjam-addons' ); ?></p>
     </div>
     <?php
 }
@@ -56,6 +144,37 @@ add_action( 'save_post_product', function( $post_id ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
     if ( ! current_user_can( 'edit_post', $post_id ) ) return;
 
+    // New multi-badge format.
+    if ( isset( $_POST['rja_shipping_badges'] ) && is_array( $_POST['rja_shipping_badges'] ) ) {
+        $badges   = array();
+        $raw_rows = wp_unslash( $_POST['rja_shipping_badges'] );
+
+        foreach ( $raw_rows as $row ) {
+            $text = isset( $row['text'] ) ? sanitize_text_field( $row['text'] ) : '';
+            $bg   = isset( $row['bg'] ) ? sanitize_key( $row['bg'] ) : 'rj-badge-bg-default';
+
+            if ( '' === $text ) {
+                continue; // Skip empty rows.
+            }
+
+            $badges[] = array(
+                'text'  => $text,
+                'bg'    => $bg,
+                'title' => '',
+            );
+        }
+
+        if ( ! empty( $badges ) ) {
+            update_post_meta( $post_id, '_rj_shipping_badges', wp_json_encode( $badges ) );
+        } else {
+            delete_post_meta( $post_id, '_rj_shipping_badges' );
+        }
+    } else {
+        // If the new field is missing completely, do not wipe existing badges silently.
+        // No-op to keep previous value.
+    }
+
+    // Keep legacy single_text meta for backward compatibility (optional).
     if ( isset( $_POST['rja_shipping_badge_text'] ) ) {
         update_post_meta( $post_id, '_rj_shipping_badge_text', sanitize_text_field( $_POST['rja_shipping_badge_text'] ) );
     }
