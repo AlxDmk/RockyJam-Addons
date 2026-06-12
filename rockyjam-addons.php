@@ -29,6 +29,7 @@ if ( file_exists( ROCKYJAM_ADDONS_PATH . 'vendor/autoload.php' ) ) {
 	require_once ROCKYJAM_ADDONS_PATH . 'vendor/autoload.php';
 } else {
 	require_once ROCKYJAM_ADDONS_PATH . 'includes/Core/Plugin.php';
+	    require_once ROCKYJAM_ADDONS_PATH . 'includes/Admin/ProductTab.php';
 	require_once ROCKYJAM_ADDONS_PATH . 'includes/Core/AddonManager.php';
 	require_once ROCKYJAM_ADDONS_PATH . 'includes/Admin/AdminPage.php';
 	require_once ROCKYJAM_ADDONS_PATH . 'includes/Helpers/Functions.php';
