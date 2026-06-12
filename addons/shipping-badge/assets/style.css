@@ -1,17 +1,39 @@
 /* Shipping Badge Addon — Frontend Styles */
 
 .rj-shipping-badge-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
     margin-bottom: 16px;
 }
 
 .rj-badge-shipping {
-    display: inline-block;
-    background: #f5f5f5;
-    color: #1a1a1a;
-    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+/* Background variants */
+.rj-badge-bg-default {
+    background: #1a1a1a;
+}
+
+.rj-badge-bg-green {
+    background: #2f855a;
+}
+
+.rj-badge-bg-orange {
+    background: #c05621;
+}
+
+.rj-badge-bg-blue {
+    background: #2b6cb0;
 }
