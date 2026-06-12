@@ -1,4 +1,11 @@
-/* RockyJam Addons — Product Data Tab styles */
+/* RockyJam Addons — Product Data Tab styles (WP Admin)
+ *
+ * Цвета основаны на CSS-переменных с fallback-значениями:
+ *   --rj-accent       акцент из Plugin Contract темы (main.css)
+ *   --wp-admin-theme-color  стандартная переменная WordPress
+ *
+ * Структурные стили (отступы, размеры) остаются в плагине.
+ */
 
 /* ---- Tab icon in sidebar ---- */
 #woocommerce-product-data ul.wc-tabs li.rockyjam_addons_options a::before {
@@ -36,12 +43,14 @@
 .rja-product-tab__section-title {
     font-size: 13px;
     font-weight: 600;
+    /* #1d2327 — стандартный WP Admin dark text, остаётся как fallback */
     color: #1d2327;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0 0 12px;
     padding: 10px 0 8px;
-    border-bottom: 2px solid #b32d2e;
+    /* акцентная подчёрка: берёт цвет из контракта темы */
+    border-bottom: 2px solid var(--rj-accent, var(--wp-admin-theme-color, #b32d2e));
     display: inline-block;
 }
 
