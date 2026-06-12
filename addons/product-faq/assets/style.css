@@ -1,16 +1,18 @@
-/* Product FAQ Addon — Frontend Styles */
-/* Core accordion layout; detailed styles in rogue-product template style.css */
+/* Product FAQ Addon — Frontend Styles
+ * Цвета берутся из Plugin Contract темы (--rj-*).
+ * Fallback-значения обеспечивают работу без RockyJam-Theme.
+ */
 
 .rj-faq-section {
     padding: 48px 0;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--rj-border, #ddd);
 }
 
 .rj-section-title {
     font-size: 22px;
     font-weight: 700;
     margin-bottom: 32px;
-    color: #1a1a1a;
+    color: var(--rj-text, #1a1a1a);
 }
 
 .rj-faq-items {
@@ -20,59 +22,59 @@
 }
 
 .rj-faq-item {
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: 1px solid var(--rj-border, #ddd);
+    border-radius: var(--rj-radius, 4px);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: border-color var(--rj-transition, 0.3s ease);
 }
 
 .rj-faq-item.active {
-    border-color: #c41e2e;
+    border-color: var(--rj-accent, #c41e2e);
 }
 
 .rj-faq-question {
-    background: #f5f5f5;
+    background: var(--rj-surface, #f5f5f5);
     padding: 16px 24px;
     cursor: pointer;
     font-size: 13px;
     font-weight: 700;
-    color: #1a1a1a;
+    color: var(--rj-text, #1a1a1a);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background 0.3s ease;
+    transition: background var(--rj-transition, 0.3s ease);
     user-select: none;
     margin: 0;
     line-height: 1.5;
 }
 
 .rj-faq-question:hover {
-    background: #ddd;
+    background: var(--rj-border, #ddd);
 }
 
 .rj-faq-question::after {
     content: "+";
     font-size: 18px;
     font-weight: 700;
-    color: #c41e2e;
+    color: var(--rj-accent, #c41e2e);
     flex-shrink: 0;
     margin-left: 12px;
 }
 
 .rj-faq-item.active .rj-faq-question::after {
-    content: "−";
+    content: "\2212"; /* − минус */
 }
 
 .rj-faq-answer {
     background: #fff;
     overflow: hidden;
     max-height: 0;
-    transition: max-height 0.3s ease;
+    transition: max-height var(--rj-transition, 0.3s ease);
 }
 
 .rj-faq-answer-content {
     padding: 24px;
     font-size: 13px;
     line-height: 1.7;
-    color: #666;
+    color: var(--rj-text-muted, #666);
 }

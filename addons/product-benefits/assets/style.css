@@ -1,4 +1,7 @@
-/* Product Benefits Addon — Frontend Styles */
+/* Product Benefits Addon — Frontend Styles
+ * Цвета берутся из Plugin Contract темы (--rj-*).
+ * Fallback-значения обеспечивают работу без RockyJam-Theme.
+ */
 
 .rj-benefits-section {
     padding: 48px 0;
@@ -12,9 +15,9 @@
 }
 
 .rj-benefit-item {
-    background: #f5f5f5;
+    background: var(--rj-surface, #f5f5f5);
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: var(--rj-radius, 8px);
     position: relative;
 }
 
@@ -22,8 +25,8 @@
     position: absolute;
     top: -10px;
     left: -10px;
-    background: #b8860b;
-    color: white;
+    background: var(--rj-gold, #b8860b);
+    color: #fff;
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -39,11 +42,12 @@
     font-weight: 700;
     margin: 0 0 0.5rem;
     letter-spacing: 0.3px;
+    color: var(--rj-text, #1a1a1a);
 }
 
 .rj-benefit-item p {
     font-size: 0.875rem;
-    color: #666;
+    color: var(--rj-text-muted, #666);
     margin: 0;
     line-height: 1.6;
 }
