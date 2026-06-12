@@ -2,7 +2,7 @@
 /**
  * Addon: Shipping Badge
  * Slug: shipping-badge
- * Description: Displays a "Ships Free Item" badge above the product title in the sidebar.
+ * Description: Displays shipping-related badges above the product title in the sidebar.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || exit;
 add_filter( 'rockyjam_register_addons', function( $addons ) {
     $addons['shipping-badge'] = array(
         'name'        => __( 'Shipping Badge', 'rockyjam-addons' ),
-        'description' => __( 'Displays a shipping-related badge above the product title.', 'rockyjam-addons' ),
-        'version'     => '1.0.0',
+        'description' => __( 'Displays one or more shipping-related badges above the product title.', 'rockyjam-addons' ),
+        'version'     => '1.1.0',
         'author'      => 'RockyJam',
     );
     return $addons;
@@ -30,12 +30,12 @@ add_action( 'wp_enqueue_scripts', function() {
         'rja-shipping-badge',
         plugin_dir_url( __FILE__ ) . 'assets/style.css',
         array(),
-        '1.0.0'
+        '1.1.0'
     );
 } );
 
 /**
- * Admin: enqueue admin styles for the meta-box.
+ * Admin: enqueue admin styles + scripts for the meta-box.
  */
 add_action( 'admin_enqueue_scripts', function( $hook ) {
     global $post;
@@ -46,7 +46,15 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
         'rja-shipping-badge-admin',
         plugin_dir_url( __FILE__ ) . 'assets/admin.css',
         array(),
-        '1.0.0'
+        '1.1.0'
+    );
+
+    wp_enqueue_script(
+        'rja-shipping-badge-admin',
+        plugin_dir_url( __FILE__ ) . 'assets/admin.js',
+        array( 'jquery', 'jquery-ui-sortable' ),
+        '1.1.0',
+        true
     );
 } );
 
